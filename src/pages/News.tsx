@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import { NewsCard } from '../components/NewsCard';
-import { getNews } from '../services/newsService';
+import {
+  getNews,
+  getNewsCategories,
+} from '../services/newsService';
 import { fallbackNews } from '../data/fallbackNews';
-import type { NewsItem } from '../types/news';
+import type {
+  NewsCategory,
+  NewsItem,
+} from '../types/news';
 
 interface NewsProps {
   compact?: boolean;
@@ -10,8 +16,27 @@ interface NewsProps {
 
 export function News({ compact = false }: NewsProps) {
   const [articles, setArticles] = useState<NewsItem[]>([]);
+  const [categories, setCategories] = useState<NewsCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function loadCategories() {
+      if (compact) {
+        return;
+      }
+
+      try {
+        const response = await getNewsCategories();
+        setCategories(response);
+      } catch (err) {
+        console.error('Erro ao carregar categorias:', err);
+      }
+    }
+
+    loadCategories();
+  }, [compact]);
 
   useEffect(() => {
     async function loadNews() {
@@ -19,8 +44,16 @@ export function News({ compact = false }: NewsProps) {
         setLoading(true);
         setError('');
 
-        const response = await getNews();
-        setArticles(compact ? response.articles.slice(0, 6) : response.articles);
+        const response = await getNews(
+          undefined,
+          selectedCategory,
+        );
+
+        setArticles(
+          compact
+            ? response.articles.slice(0, 6)
+            : response.articles,
+        );
       } catch (err) {
         setError(
           err instanceof Error
@@ -34,7 +67,7 @@ export function News({ compact = false }: NewsProps) {
     }
 
     loadNews();
-  }, [compact]);
+  }, [compact, selectedCategory]);
 
   return (
     <section className="section">
@@ -42,9 +75,44 @@ export function News({ compact = false }: NewsProps) {
         <div className="section-heading">
           <div>
             <span className="eyebrow">INFORMAÇÃO LOCAL</span>
-            <h1>{compact ? 'Últimas notícias' : 'Notícias de Rio Verde'}</h1>
+            <h1>
+              {compact
+                ? 'Últimas notícias'
+                : 'Notícias de Rio Verde'}
+            </h1>
           </div>
         </div>
+
+        {!compact && (
+          <div className="news-filter">
+            <label htmlFor="news-category">
+              Categoria
+            </label>
+
+            <select
+              id="news-category"
+              value={selectedCategory ?? ''}
+              onChange={(event) => {
+                const value = event.target.value;
+
+                setSelectedCategory(
+                  value ? Number(value) : undefined,
+                );
+              }}
+            >
+              <option value="">Todas as categorias</option>
+
+              {categories.map((category) => (
+                <option
+                  key={category.id}
+                  value={category.id}
+                >
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {loading && (
           <div className="state">
@@ -63,7 +131,10 @@ export function News({ compact = false }: NewsProps) {
         {!loading && (
           <div className="news-grid">
             {articles.map((article) => (
-              <NewsCard key={article.id} article={article} />
+              <NewsCard
+                key={article.id}
+                article={article}
+              />
             ))}
           </div>
         )}

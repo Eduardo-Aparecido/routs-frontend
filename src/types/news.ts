@@ -18,3 +18,9 @@ export interface NewsResponse {
   total: number;
   articles: NewsItem[];
 }
+
+export interface NewsCategory {
+  id: number;
+  name: string;
+  slug: string;
+}

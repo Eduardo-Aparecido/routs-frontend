@@ -12,6 +12,7 @@ export function Header() {
           <Link to="/">Início</Link>
           <Link to="/noticias">Notícias</Link>
           <Link to="/cinema">Cinema</Link>
+          <Link to="/restaurantes">Restaurantes</Link>
         </nav>
       </div>
     </header>

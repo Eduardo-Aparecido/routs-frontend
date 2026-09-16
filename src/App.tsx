@@ -1,8 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+
 import { Header } from './components/Header';
+
 import { Home } from './pages/Home';
 import { News } from './pages/News';
 import { Cinema } from './pages/Cinema';
+import { Restaurants } from './pages/Restaurants';
 
 export default function App() {
   return (
@@ -11,10 +14,30 @@ export default function App() {
 
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/noticias" element={<News />} />
-          <Route path="/cinema" element={<Cinema />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="/"
+            element={<Home />}
+          />
+
+          <Route
+            path="/noticias"
+            element={<News />}
+          />
+
+          <Route
+            path="/cinema"
+            element={<Cinema />}
+          />
+
+          <Route
+            path="/restaurantes"
+            element={<Restaurants />}
+          />
+
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+          />
         </Routes>
       </main>
     </div>

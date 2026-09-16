@@ -112,24 +112,256 @@ a {
   font-size: clamp(1.8rem, 4vw, 2.7rem);
 }
 
+/* ==========================================
+   HOME
+========================================== */
+
+.home-section {
+  padding-top: 52px;
+  padding-bottom: 52px;
+}
+
+.home-section-muted {
+  background: #f9fafb;
+}
+
+.home-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
+.home-section-heading h2 {
+  margin: 8px 0 6px;
+  color: #202a33;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.15;
+}
+
+.home-section-heading p {
+  margin: 0;
+  color: #747d86;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.home-section-link {
+  flex-shrink: 0;
+  padding-bottom: 3px;
+  color: #4f5962;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.home-section-link:hover {
+  color: #101820;
+}
+
+
+/* ==========================================
+   NOTÍCIAS NA HOME
+========================================== */
+
+.home-news-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+
+/* ==========================================
+   RESTAURANTES NA HOME
+========================================== */
+
+.home-restaurant-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+/* ==========================================
+   FILMES NA HOME
+========================================== */
+
+.home-movie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-movie-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e7e9ec;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.04);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.home-movie-card:hover {
+  transform: translateY(-3px);
+  border-color: #dde1e5;
+  box-shadow: 0 8px 20px rgba(16, 24, 32, 0.07);
+}
+
+.home-movie-poster {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background: #f1f2f3;
+}
+
+.home-movie-poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home-movie-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: #8a929c;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.home-movie-content {
+  padding: 14px;
+}
+
+.home-movie-content h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: #28313a;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.home-movie-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.home-movie-meta span {
+  padding: 4px 7px;
+  color: #707981;
+  background: #f4f5f6;
+  border-radius: 5px;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   RESPONSIVIDADE
+========================================== */
+
+@media (max-width: 1000px) {
+  .home-restaurant-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .home-movie-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .home-section-heading {
+    align-items: flex-start;
+  }
+
+  .home-news-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-restaurant-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-movie-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .home-section {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  .home-section-heading {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .home-section-heading h2 {
+    font-size: 1.45rem;
+  }
+
+  .home-news-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-restaurant-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-movie-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .home-movie-content {
+    padding: 12px;
+  }
+}
+
+/* ==========================================
+   NOTÍCIAS
+========================================== */
+
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .news-card {
   overflow: hidden;
-  background: white;
+  background: #ffffff;
   border: 1px solid #e7e9ec;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(16, 24, 32, 0.05);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.04);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-3px);
+  border-color: #dde1e5;
+  box-shadow: 0 8px 20px rgba(16, 24, 32, 0.07);
 }
 
 .news-image {
   display: block;
   width: 100%;
-  height: 210px;
+  height: 175px;
   object-fit: cover;
   background: #e8ebef;
 }
@@ -138,85 +370,102 @@ a {
   display: grid;
   place-items: center;
   color: #8a929c;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.12em;
 }
 
 .news-content {
-  padding: 20px;
+  padding: 16px;
 }
 
 .news-source {
-  font-size: 0.75rem;
+  display: block;
+  margin-bottom: 8px;
+  overflow: hidden;
+  font-size: 0.68rem;
   font-weight: 800;
+  color: #7a828a;
+  letter-spacing: 0.07em;
+  text-overflow: ellipsis;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #66717c;
+  white-space: nowrap;
 }
 
 .news-content h2 {
-  margin: 10px 0;
-  font-size: 1.2rem;
-  line-height: 1.25;
-}
-
-.news-content p {
-  color: #59636d;
-  line-height: 1.55;
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: #28313a;
+  font-size: 0.98rem;
+  font-weight: 750;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 .news-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 18px;
-  font-size: 0.82rem;
-  color: #737c86;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f1f2;
+}
+
+.news-footer time {
+  font-size: 0.7rem;
+  color: #8a929a;
+  white-space: nowrap;
 }
 
 .read-link {
-  color: #101820;
+  flex-shrink: 0;
+  color: #4f5962;
+  font-size: 0.72rem;
   font-weight: 800;
+  white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
-.state {
-  padding: 24px;
-  border: 1px dashed #cdd2d8;
-  border-radius: 12px;
-  background: white;
+.read-link:hover {
+  color: #101820;
 }
 
-.state-warning {
-  margin-bottom: 24px;
-}
 
-.state p {
-  margin-bottom: 0;
+/* ==========================================
+   RESPONSIVIDADE
+========================================== */
+
+@media (max-width: 1000px) {
+  .news-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 800px) {
   .news-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .news-image {
+    height: 180px;
   }
 }
 
 @media (max-width: 560px) {
-  .header-inner {
-    min-height: 62px;
-  }
-
-  .nav {
-    gap: 14px;
-    font-size: 0.9rem;
-  }
-
-  .hero {
-    padding: 70px 0 60px;
-  }
-
   .news-grid {
     grid-template-columns: 1fr;
+  }
+
+  .news-image {
+    height: 200px;
+  }
+
+  .news-content {
+    padding: 17px;
   }
 }
 
@@ -487,6 +736,228 @@ a {
 }
 
 /* ==========================================
+   DIAS DA PROGRAMAÇÃO
+========================================== */
+
+.session-days-scroll {
+  display: flex;
+  gap: 8px;
+
+  overflow-x: auto;
+
+  padding: 4px 2px 10px;
+  margin-bottom: 18px;
+
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.session-days-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.session-days-scroll::-webkit-scrollbar-track {
+  background: #f1f2f3;
+  border-radius: 10px;
+}
+
+.session-days-scroll::-webkit-scrollbar-thumb {
+  background: #c9cdd1;
+  border-radius: 10px;
+}
+
+/* ==========================================
+   BOTÃO DO DIA
+========================================== */
+
+.session-day-button {
+  flex: 0 0 auto;
+
+  min-width: 70px;
+  padding: 10px 13px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e1e4e7;
+  border-radius: 10px;
+
+  background: #fff;
+  color: #59636d;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.session-day-button:hover {
+  border-color: #c5cbd1;
+  transform: translateY(-1px);
+}
+
+.session-day-button.active {
+  background: #111827;
+  border-color: #111827;
+  color: #fff;
+}
+
+.session-day-name {
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.session-day-date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ==========================================
+   HORÁRIOS DO DIA
+========================================== */
+
+.session-selected {
+  padding-top: 2px;
+}
+
+.session-selected-title {
+  margin-bottom: 12px;
+
+  color: #59636d;
+
+  font-size: 0.76rem;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================
+   GRADE DE HORÁRIOS
+========================================== */
+
+.session-list {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+/* ==========================================
+   CARD DO HORÁRIO
+========================================== */
+
+.session-item {
+  min-width: 0;
+
+  padding: 12px 13px;
+
+  border: 1px solid #e1e4e7;
+  border-radius: 10px;
+
+  background: #fff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.session-item:hover {
+  border-color: #c5cbd1;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   HORÁRIO
+========================================== */
+
+.session-time {
+  margin-bottom: 8px;
+
+  color: #111827;
+
+  font-size: 1.05rem;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+/* ==========================================
+   DETALHES DO HORÁRIO
+========================================== */
+
+.session-details {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 4px;
+}
+
+.session-details span {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 4px 6px;
+
+  border-radius: 5px;
+
+  background: #f1f2f3;
+  color: #59636d;
+
+  font-size: 0.62rem;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.session-accessibility {
+  background: #e9f7ef !important;
+  color: #27764a !important;
+}
+
+/* ==========================================
+   RODAPÉ DO CINEMA
+========================================== */
+
+.cinema-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 20px 28px;
+
+  border-top: 1px solid #e7e9ec;
+}
+
+.cinema-links a {
+  color: #59636d;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.cinema-links a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================
    RESPONSIVO
 ========================================== */
 
@@ -516,7 +987,9 @@ a {
 
   .movie-card {
     grid-template-columns: 110px minmax(0, 1fr);
+
     gap: 16px;
+
     padding: 14px;
   }
 
@@ -535,11 +1008,25 @@ a {
   .cinema-links {
     padding: 18px 22px;
   }
+
+  .session-day-button {
+    min-width: 64px;
+    padding: 8px 10px;
+  }
+
+  .session-list {
+    gap: 8px;
+  }
+
+  .session-item {
+    padding: 10px;
+  }
 }
 
 @media (max-width: 480px) {
   .movie-card {
     grid-template-columns: 90px minmax(0, 1fr);
+
     gap: 12px;
   }
 
@@ -563,17 +1050,824 @@ a {
     font-size: 0.68rem;
   }
 
-  .session-list {
+  .session-days-scroll {
     gap: 6px;
   }
 
-  .session-item {
-    min-width: 82px;
+  .session-day-button {
+    min-width: 60px;
     padding: 8px;
+  }
+
+  .session-day-name {
+    font-size: 0.62rem;
+  }
+
+  .session-day-date {
+    font-size: 0.72rem;
+  }
+
+  .session-list {
+    grid-template-columns: 1fr;
+
+    gap: 7px;
+  }
+
+  .session-item {
+    padding: 10px;
+  }
+
+  .session-time {
+    font-size: 0.95rem;
   }
 
   .session-details span {
     font-size: 0.6rem;
   }
 }
+
+/* ==========================================
+   NOTÍCIAS - FILTRO
+========================================== */
+
+.news-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -12px 0 28px;
+}
+
+.news-filter label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #59636d;
+}
+
+.news-filter select {
+  min-width: 280px;
+  padding: 11px 40px 11px 14px;
+  border: 1px solid #d9dee3;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #20262d;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.news-filter select:hover {
+  border-color: #b8c0c8;
+}
+
+.news-filter select:focus {
+  border-color: #20262d;
+  box-shadow: 0 0 0 3px rgba(32, 38, 45, 0.08);
+}
+
+@media (max-width: 640px) {
+  .news-filter {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: -8px;
+  }
+
+  .news-filter select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* ==========================================
+   RESTAURANTES
+========================================== */
+
+.restaurant-section {
+  width: 100%;
+  margin-bottom: 36px;
+}
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.restaurant-section-heading {
+  margin-bottom: 18px;
+}
+
+.restaurant-section-heading h2 {
+  margin: 0;
+
+  font-size: 1.2rem;
+  line-height: 1.3;
+  font-weight: 700;
+
+  color: #1f2933;
+}
+
+
+/* ==========================================
+   GRID
+========================================== */
+
+.restaurant-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 18px;
+
+  width: 100%;
+}
+
+
+/* ==========================================
+   CARD
+========================================== */
+
+.restaurant-card {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #e6e9ec;
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #dfe3e7;
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ==========================================
+   IMAGEM
+========================================== */
+
+.restaurant-card-image {
+  position: relative;
+
+  width: 100%;
+  height: 160px;
+
+  overflow: hidden;
+
+  background: #f1f3f5;
+}
+
+.restaurant-card-image::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.00),
+      rgba(0, 0, 0, 0.06)
+    );
+}
+
+.restaurant-card-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.3s ease;
+}
+
+.restaurant-card:hover
+.restaurant-card-image img {
+  transform: scale(1.04);
+}
+
+
+/* ==========================================
+   PLACEHOLDER
+========================================== */
+
+.restaurant-card-image-placeholder {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: #7a828a;
+
+  font-size: 0.8rem;
+}
+
+
+/* ==========================================
+   CONTEÚDO
+========================================== */
+
+.restaurant-card-content {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 13px 12px;
+
+  gap: 5px;
+}
+
+
+/* ==========================================
+   NOME
+========================================== */
+
+.restaurant-card-content h3 {
+  margin: 0;
+
+  min-height: 2.5em;
+
+  font-size: 0.95rem;
+  line-height: 1.28;
+
+  font-weight: 700;
+
+  color: #1f2933;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+
+/* ==========================================
+   BAIRRO
+========================================== */
+
+.restaurant-card-neighborhood {
+  position: relative;
+
+  margin: 0;
+
+  padding-left: 12px;
+
+  font-size: 0.74rem;
+  line-height: 1.3;
+
+  color: #69737d;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.restaurant-card-neighborhood::before {
+  content: "";
+
+  position: absolute;
+
+  left: 1px;
+  top: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #aeb5bb;
+
+  transform: translateY(-50%);
+}
+
+
+/* ==========================================
+   AÇÕES
+========================================== */
+
+.restaurant-card-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 9px;
+}
+
+
+/* ==========================================
+   ÍCONES
+========================================== */
+
+.restaurant-card-icon-link {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  box-sizing: border-box;
+
+  color: #69737d;
+
+  text-decoration: none;
+
+  background: #f5f6f7;
+
+  border: 1px solid #eceef0;
+
+  border-radius: 8px;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.restaurant-card-icon-link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.restaurant-card-icon-link:hover {
+  color: #1f2933;
+
+  background: #eef0f2;
+
+  border-color: #e0e3e6;
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================
+   ÍCONES DESABILITADOS
+========================================== */
+
+.restaurant-card-icon-disabled {
+  color: #c5c9cd;
+
+  background: #fafafa;
+
+  border-color: #f0f1f2;
+
+  cursor: default;
+}
+
+.restaurant-card-icon-disabled:hover {
+  color: #c5c9cd;
+
+  background: #fafafa;
+
+  border-color: #f0f1f2;
+
+  transform: none;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1200px) {
+
+  .restaurant-row {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+
+}
+
+
+/* ==========================================
+   TABLET PEQUENO
+========================================== */
+
+@media (max-width: 900px) {
+
+  .restaurant-row {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+  }
+
+  .restaurant-card-image {
+    height: 170px;
+  }
+
+}
+
+
+/* ==========================================
+   CELULAR
+========================================== */
+
+@media (max-width: 640px) {
+
+  .restaurant-row {
+    display: flex;
+
+    gap: 14px;
+
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 8px;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none;
+  }
+
+  .restaurant-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .restaurant-row > .restaurant-card {
+    flex: 0 0 78%;
+
+    width: 78%;
+
+    scroll-snap-align: start;
+  }
+
+  .restaurant-card-image {
+    height: 170px;
+  }
+
+}
+
+/* ==========================================
+   FILTROS DOS RESTAURANTES
+========================================== */
+
+.restaurant-filters {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    240px;
+
+  gap: 12px;
+
+  width: 100%;
+
+  margin-bottom: 14px;
+}
+
+
+/* ==========================================
+   CAMPO DE PESQUISA
+========================================== */
+
+.restaurant-search {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+.restaurant-search svg {
+  position: absolute;
+
+  left: 14px;
+
+  width: 18px;
+  height: 18px;
+
+  color: #8a929a;
+
+  pointer-events: none;
+}
+
+.restaurant-search input {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 14px 0 42px;
+
+  font-family: inherit;
+  font-size: 0.88rem;
+
+  color: #1f2933;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e5e8;
+  border-radius: 10px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.restaurant-search input::placeholder {
+  color: #9aa1a8;
+}
+
+.restaurant-search input:focus {
+  border-color: #c7cdd2;
+
+  box-shadow:
+    0 0 0 3px rgba(31, 41, 51, 0.05);
+}
+
+
+/* ==========================================
+   FILTRO DE BAIRRO
+========================================== */
+
+.restaurant-neighborhood-filter {
+  position: relative;
+
+  width: 100%;
+}
+
+.restaurant-neighborhood-filter select {
+  appearance: none;
+
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 42px 0 14px;
+
+  font-family: inherit;
+  font-size: 0.88rem;
+
+  color: #4f5962;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e5e8;
+  border-radius: 10px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.restaurant-neighborhood-filter select:focus {
+  border-color: #c7cdd2;
+
+  box-shadow:
+    0 0 0 3px rgba(31, 41, 51, 0.05);
+}
+
+.restaurant-neighborhood-filter svg {
+  position: absolute;
+
+  top: 50%;
+  right: 14px;
+
+  width: 16px;
+  height: 16px;
+
+  color: #8a929a;
+
+  pointer-events: none;
+
+  transform: translateY(-50%);
+}
+
+
+/* ==========================================
+   CONTADOR DE RESULTADOS
+========================================== */
+
+.restaurant-results-info {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 28px;
+
+  margin-bottom: 14px;
+}
+
+.restaurant-results-info span {
+  font-size: 0.76rem;
+
+  line-height: 1.3;
+
+  color: #7a828a;
+}
+
+
+/* ==========================================
+   NENHUM RESULTADO
+========================================== */
+
+.restaurant-empty {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 50px 20px;
+
+  text-align: center;
+
+  background: #fafbfc;
+
+  border: 1px solid #e8eaec;
+
+  border-radius: 14px;
+}
+
+.restaurant-empty strong {
+  margin-bottom: 6px;
+
+  font-size: 0.95rem;
+
+  color: #303942;
+}
+
+.restaurant-empty p {
+  margin: 0;
+
+  font-size: 0.82rem;
+
+  color: #7a828a;
+}
+
+
+/* ==========================================
+   PAGINAÇÃO
+========================================== */
+
+.restaurant-pagination {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  margin-top: 28px;
+}
+
+.restaurant-pagination button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  color: #69737d;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e5e8;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.restaurant-pagination button:hover:not(:disabled) {
+  color: #1f2933;
+
+  background: #f5f6f7;
+
+  border-color: #d8dde1;
+}
+
+.restaurant-pagination button.active {
+  color: #ffffff;
+
+  background: #1f2933;
+
+  border-color: #1f2933;
+}
+
+.restaurant-pagination button:disabled {
+  color: #c5c9cd;
+
+  background: #fafafa;
+
+  border-color: #eeeeef;
+
+  cursor: default;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 700px) {
+
+  .restaurant-filters {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+}
+
+
+/* ==========================================
+   CELULAR
+========================================== */
+
+@media (max-width: 640px) {
+
+  .restaurant-pagination {
+    margin-top: 24px;
+  }
+
+  .restaurant-pagination button {
+    width: 32px;
+    height: 32px;
+  }
+
+}
+
+
+
+
+
+
+
+
+
 

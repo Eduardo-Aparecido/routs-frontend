@@ -3,6 +3,7 @@ export interface SessionItem {
   language: string;
   format: string | null;
   accessibility: boolean;
+  room: string | null;
 }
 
 export interface SessionDay {
@@ -20,6 +21,7 @@ export interface Movie {
   cast: string[];
   classification: string | null;
   description: string | null;
+  duration: string | null;
   sessions: SessionDay[];
 }
 

@@ -15,19 +15,23 @@ export function NewsCard({ article }: NewsCardProps) {
           loading="lazy"
         />
       ) : (
-        <div className="news-image news-image-placeholder">ROUTS</div>
+        <div className="news-image news-image-placeholder">
+          ROUTS
+        </div>
       )}
 
       <div className="news-content">
-        <span className="news-source">{article.source.name}</span>
+        <span className="news-source">
+          {article.source.name}
+        </span>
 
         <h2>{article.title}</h2>
 
-        <p>{article.description}</p>
-
         <div className="news-footer">
           <time dateTime={article.publishedAt}>
-            {new Date(article.publishedAt).toLocaleDateString('pt-BR')}
+            {new Date(article.publishedAt).toLocaleDateString(
+              'pt-BR',
+            )}
           </time>
 
           <a

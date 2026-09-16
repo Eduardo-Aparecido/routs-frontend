@@ -101,8 +101,8 @@ function matchesCategory(
   const searchText = normalizeText(
     [
       restaurant.name,
-      restaurant.cuisine ?? '',
-      restaurant.description ?? '',
+      restaurant.address ?? '',
+      restaurant.neighborhood ?? '',
     ].join(' '),
   );
 
@@ -134,3 +134,4 @@ export function categorizeRestaurants(
 
   return categories;
 }
+

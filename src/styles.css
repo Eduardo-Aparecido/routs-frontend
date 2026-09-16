@@ -1862,6 +1862,49 @@ a {
 
 }
 
+/* ==========================================
+   HEADER - CELULAR
+========================================== */
+
+@media (max-width: 640px) {
+  .header-inner {
+    min-height: 64px;
+    gap: 12px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .logo {
+    flex-shrink: 0;
+    font-size: 1.15rem;
+  }
+
+  .nav {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    gap: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+}
+
+
+
 
 
 

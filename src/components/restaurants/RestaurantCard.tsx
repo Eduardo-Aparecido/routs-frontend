@@ -2,6 +2,7 @@ import type { Restaurant } from '../../types/restaurant';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
+  variant?: 'default' | 'compact';
 }
 
 /**
@@ -34,14 +35,19 @@ function getWhatsAppLink(phone: string): string {
 
 export function RestaurantCard({
   restaurant,
+  variant = 'default',
 }: RestaurantCardProps) {
   const whatsappLink = restaurant.phone
     ? getWhatsAppLink(restaurant.phone)
     : null;
 
   return (
-    <article className="restaurant-card">
-      {/* ==========================================
+      <article
+        className={`restaurant-card ${
+          variant === 'compact' ? 'restaurant-card-compact' : ''
+        }`}
+      >
+        {/* ==========================================
           IMAGEM
       ========================================== */}
 

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { NewsCard } from '../components/NewsCard';
 import { RestaurantCard } from '../components/restaurants/RestaurantCard';
 
 import { getNews } from '../services/newsService';
@@ -12,7 +11,7 @@ import type { NewsItem } from '../types/news';
 import type { Restaurant } from '../types/restaurant';
 import type { Cinema as CinemaType } from '../types/cinema';
 
-const NEWS_LIMIT = 3;
+const NEWS_LIMIT = 6;
 const RESTAURANT_LIMIT = 4;
 const MOVIE_LIMIT = 4;
 
@@ -23,6 +22,25 @@ interface MovieItem {
   genre: string | null;
   classification: string | null;
   description: string | null;
+}
+
+function formatNewsDate(date?: string | null) {
+  if (!date) {
+    return null;
+  }
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return null;
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+  })
+    .format(parsedDate)
+    .replace('.', '');
 }
 
 export function Home() {
@@ -130,152 +148,127 @@ export function Home() {
     return Array.from(movieMap.values()).slice(0, MOVIE_LIMIT);
   }, [cinemas]);
 
+  const featuredNews = news[0];
+  const secondaryNews = news.slice(1, 3);
+  const latestNews = news.slice(3, 6);
+
   return (
     <>
       {/* ==========================================
-          HERO
+          DESTAQUES
       ========================================== */}
 
-      <section className="hero">
+      <section className="home-editorial">
         <div className="container">
-          <span className="eyebrow">RIO VERDE • GOIÁS</span>
-
-          <h1>
-            Descubra o que está acontecendo em Rio Verde.
-          </h1>
-
-          <p>
-            Notícias, gastronomia, cinema e tudo o que acontece
-            pela cidade em um só lugar.
-          </p>
-
-          <Link to="/noticias" className="button">
-            Explorar o ROUTS
-          </Link>
-        </div>
-      </section>
-
-      {/* ==========================================
-          NOTÍCIAS
-      ========================================== */}
-
-      <section className="section home-section">
-        <div className="container">
-          <div className="home-section-heading">
-            <div>
-              <span className="eyebrow">
-                INFORMAÇÃO LOCAL
-              </span>
-
-              <h2>Principais notícias</h2>
-
-              <p>
-                O que está acontecendo em Rio Verde e região.
-              </p>
-            </div>
-
-            <Link to="/noticias" className="home-section-link">
-              Ver todas →
-            </Link>
-          </div>
-
           {newsLoading && (
-            <div className="state">
-              <p>Carregando notícias...</p>
+            <div className="state home-featured-state">
+              <p>Carregando destaques...</p>
             </div>
           )}
 
           {!newsLoading && newsError && (
-            <div className="state state-warning">
+            <div className="state state-warning home-featured-state">
               <strong>
-                Não foi possível carregar as notícias.
+                Não foi possível carregar os destaques.
               </strong>
 
               <p>{newsError}</p>
             </div>
           )}
 
-          {!newsLoading && !newsError && news.length > 0 && (
-            <div className="news-grid home-news-grid">
-              {news.map((article) => (
-                <NewsCard
-                  key={article.id}
-                  article={article}
-                />
-              ))}
-            </div>
-          )}
-
-          {!newsLoading && !newsError && news.length === 0 && (
-            <div className="state">
-              <p>Nenhuma notícia disponível no momento.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ==========================================
-          RESTAURANTES
-      ========================================== */}
-
-      <section className="section home-section home-section-muted">
-        <div className="container">
-          <div className="home-section-heading">
-            <div>
-              <span className="eyebrow">
-                GASTRONOMIA • RIO VERDE
-              </span>
-
-              <h2>Bateu aquela fome?</h2>
-
-              <p>
-                Encontre restaurantes e lugares para comer em Rio Verde.
-              </p>
-            </div>
-
-            <Link
-              to="/restaurantes"
-              className="home-section-link"
-            >
-              Ver todos →
-            </Link>
-          </div>
-
-          {restaurantsLoading && (
-            <div className="state">
-              <p>Carregando restaurantes...</p>
-            </div>
-          )}
-
-          {!restaurantsLoading && restaurantsError && (
-            <div className="state state-warning">
-              <strong>
-                Não foi possível carregar os restaurantes.
-              </strong>
-
-              <p>{restaurantsError}</p>
-            </div>
-          )}
-
-          {!restaurantsLoading &&
-            !restaurantsError &&
-            restaurants.length > 0 && (
-              <div className="restaurant-row home-restaurant-row">
-                {restaurants.map((restaurant) => (
-                  <RestaurantCard
-                    key={restaurant.id}
-                    restaurant={restaurant}
+          {!newsLoading && !newsError && featuredNews && (
+            <div className="home-featured-grid">
+              <a
+                href={featuredNews.url}
+                target="_blank"
+                rel="noreferrer"
+                className="home-main-story"
+              >
+                {featuredNews.image ? (
+                  <img
+                    src={featuredNews.image}
+                    alt=""
+                    className="home-story-image"
                   />
+                ) : (
+                  <div className="home-story-placeholder">
+                    ROUTS
+                  </div>
+                )}
+
+                <div className="home-story-overlay" />
+
+                <div className="home-main-story-content">
+                  <span className="home-story-category">
+                    {featuredNews.source?.name || 'Rio Verde'}
+                  </span>
+
+                  <h1>{featuredNews.title}</h1>
+
+                  <div className="home-story-meta">
+                    {formatNewsDate(featuredNews.publishedAt) && (
+                      <span>
+                        {formatNewsDate(
+                          featuredNews.publishedAt,
+                        )}
+                      </span>
+                    )}
+
+                    <span>Rio Verde, GO</span>
+                  </div>
+                </div>
+              </a>
+
+              <div className="home-secondary-stories">
+                {secondaryNews.map((article) => (
+                  <a
+                    key={article.id}
+                    href={article.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="home-secondary-story"
+                  >
+                    {article.image ? (
+                      <img
+                        src={article.image}
+                        alt=""
+                        className="home-story-image"
+                      />
+                    ) : (
+                      <div className="home-story-placeholder">
+                        ROUTS
+                      </div>
+                    )}
+
+                    <div className="home-story-overlay" />
+
+                    <div className="home-secondary-story-content">
+                      <span className="home-story-category">
+                        {article.source?.name || 'Notícias'}
+                      </span>
+
+                      <h2>{article.title}</h2>
+
+                      {formatNewsDate(article.publishedAt) && (
+                        <span className="home-secondary-date">
+                          {formatNewsDate(
+                            article.publishedAt,
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </a>
                 ))}
               </div>
-            )}
+            </div>
+          )}
 
-          {!restaurantsLoading &&
-            !restaurantsError &&
-            restaurants.length === 0 && (
-              <div className="state">
+          {!newsLoading &&
+            !newsError &&
+            news.length === 0 && (
+              <div className="state home-featured-state">
                 <p>
-                  Nenhum restaurante disponível no momento.
+                  Nenhuma notícia disponível no momento.
                 </p>
               </div>
             )}
@@ -283,45 +276,179 @@ export function Home() {
       </section>
 
       {/* ==========================================
+          CONTEÚDO PRINCIPAL
+      ========================================== */}
+
+      <section className="home-dashboard">
+        <div className="container home-dashboard-grid">
+          {/* ÚLTIMAS NOTÍCIAS */}
+
+          <div className="home-dashboard-column home-latest-column">
+            <div className="home-panel-heading">
+              <div>
+                <span className="home-panel-eyebrow">
+                  FIQUE POR DENTRO
+                </span>
+
+                <h2>Últimas notícias</h2>
+              </div>
+
+              <Link
+                to="/noticias"
+                className="home-panel-link"
+              >
+                Ver todas →
+              </Link>
+            </div>
+
+            {!newsLoading &&
+              !newsError &&
+              latestNews.length > 0 && (
+                <div className="home-latest-list">
+                  {latestNews.map((article) => (
+                    <a
+                      key={article.id}
+                      href={article.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="home-latest-item"
+                    >
+                      <div className="home-latest-image">
+                        {article.image ? (
+                          <img
+                            src={article.image}
+                            alt=""
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span>ROUTS</span>
+                        )}
+                      </div>
+
+                      <div className="home-latest-content">
+                        <span className="home-latest-source">
+                          {article.source?.name || 'Notícias'}
+                        </span>
+
+                        <h3>{article.title}</h3>
+
+                        {formatNewsDate(
+                          article.publishedAt,
+                        ) && (
+                          <time>
+                            {formatNewsDate(
+                              article.publishedAt,
+                            )}
+                          </time>
+                        )}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+            {!newsLoading &&
+              !newsError &&
+              latestNews.length === 0 && (
+                <div className="home-panel-empty">
+                  Mais notícias aparecerão aqui.
+                </div>
+              )}
+          </div>
+
+          {/* GASTRONOMIA */}
+
+          <div className="home-dashboard-column home-food-column">
+            <div className="home-panel-heading">
+              <div>
+                <span className="home-panel-eyebrow">
+                  SABORES DA CIDADE
+                </span>
+
+                <h2>Gastronomia</h2>
+              </div>
+
+              <Link
+                to="/restaurantes"
+                className="home-panel-link"
+              >
+                Ver todos →
+              </Link>
+            </div>
+
+            {restaurantsLoading && (
+              <div className="home-panel-empty">
+                Carregando restaurantes...
+              </div>
+            )}
+
+            {!restaurantsLoading && restaurantsError && (
+              <div className="home-panel-empty">
+                Não foi possível carregar os restaurantes.
+              </div>
+            )}
+
+            {!restaurantsLoading &&
+              !restaurantsError &&
+              restaurants.length > 0 && (
+                <div className="home-restaurant-row">
+                  {restaurants.map((restaurant) => (
+                    <RestaurantCard
+                      key={restaurant.id}
+                      restaurant={restaurant}
+                      variant="compact"
+                    />
+                  ))}
+                </div>
+              )}
+
+            {!restaurantsLoading &&
+              !restaurantsError &&
+              restaurants.length === 0 && (
+                <div className="home-panel-empty">
+                  Nenhum restaurante disponível.
+                </div>
+              )}
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
           CINEMA
       ========================================== */}
 
-      <section className="section home-section">
+      <section className="home-cinema-section">
         <div className="container">
-          <div className="home-section-heading">
+          <div className="home-cinema-heading">
             <div>
-              <span className="eyebrow">
+              <span className="home-panel-eyebrow">
                 LAZER • RIO VERDE
               </span>
 
-              <h2>O que está passando na telona?</h2>
+              <h2>Em cartaz nos cinemas</h2>
 
               <p>
-                Confira os filmes em cartaz nos cinemas de Rio Verde.
+                Confira alguns dos filmes em exibição na cidade.
               </p>
             </div>
 
             <Link
               to="/cinema"
-              className="home-section-link"
+              className="home-panel-link"
             >
               Ver programação →
             </Link>
           </div>
 
           {cinemaLoading && (
-            <div className="state">
-              <p>Carregando programação...</p>
+            <div className="home-panel-empty">
+              Carregando programação...
             </div>
           )}
 
           {!cinemaLoading && cinemaError && (
-            <div className="state state-warning">
-              <strong>
-                Não foi possível carregar a programação.
-              </strong>
-
-              <p>{cinemaError}</p>
+            <div className="home-panel-empty">
+              Não foi possível carregar a programação.
             </div>
           )}
 
@@ -330,7 +457,8 @@ export function Home() {
             movies.length > 0 && (
               <div className="home-movie-grid">
                 {movies.map((movie) => (
-                  <article
+                  <Link
+                    to="/cinema"
                     className="home-movie-card"
                     key={movie.id}
                   >
@@ -346,24 +474,28 @@ export function Home() {
                           Sem pôster
                         </div>
                       )}
+
+                      {movie.classification && (
+                        <span className="home-movie-classification">
+                          {movie.classification}
+                        </span>
+                      )}
                     </div>
 
                     <div className="home-movie-content">
                       <h3>{movie.title}</h3>
 
-                      <div className="home-movie-meta">
-                        {movie.genre && (
-                          <span>{movie.genre}</span>
-                        )}
+                      {movie.genre && (
+                        <p className="home-movie-genre">
+                          {movie.genre}
+                        </p>
+                      )}
 
-                        {movie.classification && (
-                          <span>
-                            {movie.classification}
-                          </span>
-                        )}
-                      </div>
+                      <span className="home-movie-action">
+                        Ver sessões →
+                      </span>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}
@@ -371,15 +503,105 @@ export function Home() {
           {!cinemaLoading &&
             !cinemaError &&
             movies.length === 0 && (
-              <div className="state">
-                <p>
-                  Nenhum filme disponível no momento.
-                </p>
+              <div className="home-panel-empty">
+                Nenhum filme disponível no momento.
               </div>
             )}
         </div>
       </section>
+
+      {/* ==========================================
+          NEWSLETTER
+      ========================================== */}
+
+      <section className="home-newsletter">
+        <div className="container home-newsletter-inner">
+          <div className="home-newsletter-copy">
+            <div className="home-newsletter-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
+
+                <path
+                  d="m4 7 8 6 8-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <strong>
+                Receba as principais novidades de Rio Verde
+              </strong>
+
+              <span>
+                Notícias, gastronomia e lazer em um só lugar.
+              </span>
+            </div>
+          </div>
+
+          <div className="home-newsletter-coming-soon">
+            Newsletter em breve
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          FOOTER
+      ========================================== */}
+
+      <footer className="site-footer">
+        <div className="container site-footer-grid">
+          <div className="site-footer-brand">
+            <Link to="/" className="footer-logo">
+              <span>ROUTS</span>
+              <small>DESCUBRA RIO VERDE</small>
+            </Link>
+
+            <p>
+              Informação, gastronomia e entretenimento de
+              Rio Verde em um só lugar.
+            </p>
+          </div>
+
+          <div className="site-footer-column">
+            <strong>Explore</strong>
+
+            <Link to="/">Início</Link>
+            <Link to="/noticias">Notícias</Link>
+            <Link to="/cinema">Cinema</Link>
+            <Link to="/restaurantes">Gastronomia</Link>
+          </div>
+
+          <div className="site-footer-column">
+            <strong>ROUTS</strong>
+
+            <span>Rio Verde, Goiás</span>
+            <span>Conteúdo local</span>
+            <span>Descubra a cidade</span>
+          </div>
+        </div>
+
+        <div className="container site-footer-bottom">
+          <span>
+            © {new Date().getFullYear()} ROUTS
+          </span>
+
+          <span>Feito para Rio Verde, GO.</span>
+        </div>
+      </footer>
     </>
   );
 }
-

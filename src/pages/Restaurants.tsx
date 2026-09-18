@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { getRestaurants } from '../services/restaurantService';
-
 import type { Restaurant } from '../types/restaurant';
-
 import { RestaurantCard } from '../components/restaurants/RestaurantCard';
 
 const ITEMS_PER_PAGE = 12;
@@ -14,12 +12,6 @@ const ITEMS_PER_PAGE = 12;
  * Remove:
  * - diferenças entre maiúsculas/minúsculas
  * - acentos
- *
- * Exemplo:
- *
- * "Açaí da Beth"
- * ↓
- * "acai da beth"
  */
 function normalizeText(value: string): string {
   return value
@@ -47,9 +39,10 @@ export function Restaurants() {
   const [error, setError] =
     useState('');
 
-  /*
-   * Busca todos os restaurantes na API.
-   */
+  /* ==========================================
+     CARREGAMENTO DOS RESTAURANTES
+  ========================================== */
+
   useEffect(() => {
     async function loadRestaurants() {
       try {
@@ -76,13 +69,10 @@ export function Restaurants() {
     loadRestaurants();
   }, []);
 
-  /*
-   * Cria automaticamente a lista de bairros
-   * encontrados nos restaurantes.
-   *
-   * O usuário não precisa de uma lista
-   * cadastrada manualmente.
-   */
+  /* ==========================================
+     BAIRROS DISPONÍVEIS
+  ========================================== */
+
   const neighborhoods = useMemo(() => {
     const uniqueNeighborhoods =
       new Set<string>();
@@ -106,12 +96,10 @@ export function Restaurants() {
     );
   }, [restaurants]);
 
-  /*
-   * Aplica:
-   *
-   * 1. pesquisa pelo nome
-   * 2. filtro por bairro
-   */
+  /* ==========================================
+     FILTROS
+  ========================================== */
+
   const filteredRestaurants =
     useMemo(() => {
       const normalizedSearch =
@@ -119,18 +107,12 @@ export function Restaurants() {
 
       return restaurants.filter(
         (restaurant) => {
-          /*
-           * Pesquisa pelo nome.
-           */
           const matchesSearch =
             !normalizedSearch ||
             normalizeText(
               restaurant.name,
             ).includes(normalizedSearch);
 
-          /*
-           * Filtro pelo bairro.
-           */
           const matchesNeighborhood =
             !selectedNeighborhood ||
             restaurant.neighborhood?.trim() ===
@@ -148,18 +130,15 @@ export function Restaurants() {
       selectedNeighborhood,
     ]);
 
-  /*
-   * Quantidade total de páginas.
-   */
+  /* ==========================================
+     PAGINAÇÃO
+  ========================================== */
+
   const totalPages = Math.ceil(
     filteredRestaurants.length /
       ITEMS_PER_PAGE,
   );
 
-  /*
-   * Mantém a página válida quando
-   * um filtro reduz os resultados.
-   */
   useEffect(() => {
     if (
       totalPages > 0 &&
@@ -179,10 +158,6 @@ export function Restaurants() {
     currentPage,
   ]);
 
-  /*
-   * Seleciona somente os 12 restaurantes
-   * da página atual.
-   */
   const paginatedRestaurants =
     useMemo(() => {
       const start =
@@ -201,10 +176,10 @@ export function Restaurants() {
       currentPage,
     ]);
 
-  /*
-   * Quando o usuário pesquisa,
-   * voltamos para a primeira página.
-   */
+  /* ==========================================
+     EVENTOS
+  ========================================== */
+
   function handleSearchChange(
     value: string,
   ) {
@@ -212,10 +187,6 @@ export function Restaurants() {
     setCurrentPage(1);
   }
 
-  /*
-   * Quando o usuário troca o bairro,
-   * voltamos para a primeira página.
-   */
   function handleNeighborhoodChange(
     value: string,
   ) {
@@ -223,9 +194,6 @@ export function Restaurants() {
     setCurrentPage(1);
   }
 
-  /*
-   * Troca de página.
-   */
   function handlePageChange(
     page: number,
   ) {
@@ -238,300 +206,370 @@ export function Restaurants() {
 
     setCurrentPage(page);
 
-    /*
-     * Volta o usuário para o início
-     * da seção de restaurantes.
-     */
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    const restaurantContent =
+      document.getElementById(
+        'restaurant-results',
+      );
+
+    if (restaurantContent) {
+      const headerOffset = 110;
+
+      const elementPosition =
+        restaurantContent.getBoundingClientRect().top;
+
+      const offsetPosition =
+        elementPosition +
+        window.scrollY -
+        headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
   }
 
   return (
-    <section className="section">
-      <div className="container">
+    <main className="restaurants-page">
 
-        {/* ======================================
-            CABEÇALHO
-        ====================================== */}
+      {/* ==========================================
+          CABEÇALHO DA PÁGINA
+      ========================================== */}
 
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">
-              GASTRONOMIA • RIO VERDE
-            </span>
+      <section className="restaurants-page-hero">
+        <div className="container">
 
-            <h1>
-              Restaurantes em Rio Verde
-            </h1>
-          </div>
+          <span className="restaurants-page-eyebrow">
+            GASTRONOMIA • RIO VERDE
+          </span>
+
+          <h1>
+            Sabores de Rio Verde
+          </h1>
+
+          <p>
+            Descubra restaurantes, bares e lugares
+            para comer na cidade.
+          </p>
+
         </div>
-
-        <p className="restaurant-intro">
-          Descubra restaurantes, bares e
-          lugares para comer em Rio Verde.
-        </p>
+      </section>
 
 
-        {/* ======================================
-            CARREGANDO
-        ====================================== */}
+      {/* ==========================================
+          CONTEÚDO
+      ========================================== */}
 
-        {loading && (
-          <div className="state">
-            <p>
-              Carregando restaurantes...
-            </p>
-          </div>
-        )}
+      <section className="restaurants-page-content">
+        <div className="container">
 
+          {/* ======================================
+              CARREGANDO
+          ====================================== */}
 
-        {/* ======================================
-            ERRO
-        ====================================== */}
-
-        {error && (
-          <div className="state state-warning">
-            <strong>
-              Não foi possível carregar
-              os restaurantes.
-            </strong>
-
-            <p>{error}</p>
-          </div>
-        )}
-
-
-        {/* ======================================
-            CONTEÚDO
-        ====================================== */}
-
-        {!loading && !error && (
-          <div className="restaurant-section">
-
-            {/* ==================================
-                TÍTULO
-            ================================== */}
-
-            <div className="restaurant-section-heading">
-              <h2>
-                Restaurantes em destaque
-              </h2>
+          {loading && (
+            <div className="state">
+              <p>
+                Carregando restaurantes...
+              </p>
             </div>
+          )}
 
 
-            {/* ==================================
-                FILTROS
-            ================================== */}
+          {/* ======================================
+              ERRO
+          ====================================== */}
 
-            <div className="restaurant-filters">
+          {error && (
+            <div className="state state-warning">
+              <strong>
+                Não foi possível carregar
+                os restaurantes.
+              </strong>
 
-              {/* PESQUISA */}
+              <p>{error}</p>
+            </div>
+          )}
 
-              <div className="restaurant-search">
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="6.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
 
-                  <path
-                    d="m16 16 4.5 4.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
+          {/* ======================================
+              RESTAURANTES
+          ====================================== */}
 
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(event) =>
-                    handleSearchChange(
-                      event.target.value,
-                    )
-                  }
-                  placeholder="Buscar restaurante..."
-                  aria-label="Buscar restaurante"
-                />
+          {!loading && !error && (
+            <div className="restaurants-page-main">
+
+              {/* ==================================
+                  CABEÇALHO DA VITRINE
+              ================================== */}
+
+              <div className="restaurants-results-header">
+
+                <div>
+                  <span className="restaurants-section-eyebrow">
+                    EXPLORE A CIDADE
+                  </span>
+
+                  <h2>
+                    Onde comer em Rio Verde
+                  </h2>
+                </div>
+
+                <span className="restaurants-total">
+                  {filteredRestaurants.length === 1
+                    ? '1 estabelecimento'
+                    : `${filteredRestaurants.length} estabelecimentos`}
+                </span>
+
               </div>
 
 
-              {/* BAIRRO */}
+              {/* ==================================
+                  FILTROS
+              ================================== */}
 
-              <div className="restaurant-neighborhood-filter">
+              <div className="restaurants-toolbar">
 
-                <select
-                  value={
-                    selectedNeighborhood
-                  }
-                  onChange={(event) =>
-                    handleNeighborhoodChange(
-                      event.target.value,
-                    )
-                  }
-                  aria-label="Filtrar por bairro"
-                >
-                  <option value="">
-                    Todos os bairros
-                  </option>
+                {/* PESQUISA */}
 
-                  {neighborhoods.map(
-                    (neighborhood) => (
-                      <option
-                        key={neighborhood}
-                        value={neighborhood}
-                      >
-                        {neighborhood}
-                      </option>
-                    ),
-                  )}
-                </select>
+                <div className="restaurant-search">
 
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="m7 10 5 5 5-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-              </div>
-
-            </div>
-
-
-            {/* ==================================
-                CONTADOR
-            ================================== */}
-
-            <div className="restaurant-results-info">
-              <span>
-                {filteredRestaurants.length === 1
-                  ? '1 estabelecimento encontrado'
-                  : `${filteredRestaurants.length} estabelecimentos encontrados`}
-              </span>
-            </div>
-
-
-            {/* ==================================
-                RESULTADOS
-            ================================== */}
-
-            {paginatedRestaurants.length > 0 ? (
-              <div className="restaurant-row">
-
-                {paginatedRestaurants.map(
-                  (restaurant) => (
-                    <RestaurantCard
-                      key={restaurant.id}
-                      restaurant={restaurant}
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="11"
+                      cy="11"
+                      r="6.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     />
-                  ),
+
+                    <path
+                      d="m16 16 4.5 4.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+
+                  <input
+                    type="search"
+                    value={search}
+                    onChange={(event) =>
+                      handleSearchChange(
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Buscar restaurante..."
+                    aria-label="Buscar restaurante"
+                  />
+
+                </div>
+
+
+                {/* BAIRRO */}
+
+                <div className="restaurant-neighborhood-filter">
+
+                  <select
+                    value={
+                      selectedNeighborhood
+                    }
+                    onChange={(event) =>
+                      handleNeighborhoodChange(
+                        event.target.value,
+                      )
+                    }
+                    aria-label="Filtrar por bairro"
+                  >
+                    <option value="">
+                      Todos os bairros
+                    </option>
+
+                    {neighborhoods.map(
+                      (neighborhood) => (
+                        <option
+                          key={neighborhood}
+                          value={neighborhood}
+                        >
+                          {neighborhood}
+                        </option>
+                      ),
+                    )}
+
+                  </select>
+
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="m7 10 5 5 5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+
+                </div>
+
+              </div>
+
+
+              {/* ==================================
+                  INFORMAÇÃO DOS RESULTADOS
+              ================================== */}
+
+              {(search ||
+                selectedNeighborhood) && (
+                <div className="restaurants-filter-result">
+
+                  <span>
+                    {filteredRestaurants.length === 1
+                      ? '1 resultado encontrado'
+                      : `${filteredRestaurants.length} resultados encontrados`}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearch('');
+                      setSelectedNeighborhood('');
+                      setCurrentPage(1);
+                    }}
+                  >
+                    Limpar filtros
+                  </button>
+
+                </div>
+              )}
+
+
+              {/* ==================================
+                  GRID DE RESTAURANTES
+              ================================== */}
+
+              <div id="restaurant-results">
+
+                {paginatedRestaurants.length > 0 ? (
+                  <div className="restaurant-row">
+
+                    {paginatedRestaurants.map(
+                      (restaurant) => (
+                        <RestaurantCard
+                          key={restaurant.id}
+                          restaurant={restaurant}
+                        />
+                      ),
+                    )}
+
+                  </div>
+                ) : (
+                  <div className="restaurant-empty">
+
+                    <strong>
+                      Nenhum estabelecimento encontrado.
+                    </strong>
+
+                    <p>
+                      Tente pesquisar por outro nome
+                      ou selecionar outro bairro.
+                    </p>
+
+                  </div>
                 )}
 
               </div>
-            ) : (
-              <div className="restaurant-empty">
-                <strong>
-                  Nenhum estabelecimento encontrado.
-                </strong>
-
-                <p>
-                  Tente pesquisar por outro nome
-                  ou selecionar outro bairro.
-                </p>
-              </div>
-            )}
 
 
-            {/* ==================================
-                PAGINAÇÃO
-            ================================== */}
+              {/* ==================================
+                  PAGINAÇÃO
+              ================================== */}
 
-            {totalPages > 1 && (
-              <div className="restaurant-pagination">
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handlePageChange(
-                      currentPage - 1,
-                    )
-                  }
-                  disabled={currentPage === 1}
-                  aria-label="Página anterior"
+              {totalPages > 1 && (
+                <nav
+                  className="restaurant-pagination"
+                  aria-label="Paginação dos restaurantes"
                 >
-                  ‹
-                </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handlePageChange(
+                        currentPage - 1,
+                      )
+                    }
+                    disabled={currentPage === 1}
+                    aria-label="Página anterior"
+                  >
+                    ‹
+                  </button>
 
 
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => {
-                    const page =
-                      index + 1;
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => {
+                      const page =
+                        index + 1;
 
-                    return (
-                      <button
-                        key={page}
-                        type="button"
-                        className={
-                          page === currentPage
-                            ? 'active'
-                            : ''
-                        }
-                        onClick={() =>
-                          handlePageChange(
-                            page,
-                          )
-                        }
-                      >
-                        {page}
-                      </button>
-                    );
-                  },
-                )}
+                      return (
+                        <button
+                          key={page}
+                          type="button"
+                          className={
+                            page === currentPage
+                              ? 'active'
+                              : ''
+                          }
+                          onClick={() =>
+                            handlePageChange(
+                              page,
+                            )
+                          }
+                          aria-current={
+                            page === currentPage
+                              ? 'page'
+                              : undefined
+                          }
+                        >
+                          {page}
+                        </button>
+                      );
+                    },
+                  )}
 
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handlePageChange(
-                      currentPage + 1,
-                    )
-                  }
-                  disabled={
-                    currentPage === totalPages
-                  }
-                  aria-label="Próxima página"
-                >
-                  ›
-                </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handlePageChange(
+                        currentPage + 1,
+                      )
+                    }
+                    disabled={
+                      currentPage === totalPages
+                    }
+                    aria-label="Próxima página"
+                  >
+                    ›
+                  </button>
 
-              </div>
-            )}
+                </nav>
+              )}
 
-          </div>
-        )}
+            </div>
+          )}
 
-      </div>
-    </section>
+        </div>
+      </section>
+
+    </main>
   );
 }
 

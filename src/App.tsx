@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 import { Home } from './pages/Home';
 import { News } from './pages/News';
@@ -40,6 +41,9 @@ export default function App() {
           />
         </Routes>
       </main>
+
+      <Footer />
     </div>
   );
 }
+

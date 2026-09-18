@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+
 import { getCinemas } from '../services/cinemaService';
+
 import type {
   Cinema as CinemaType,
   Movie,
@@ -79,9 +81,11 @@ export function Cinema() {
     const today = new Date();
 
     const year = today.getFullYear();
+
     const month = String(
       today.getMonth() + 1,
     ).padStart(2, '0');
+
     const day = String(
       today.getDate(),
     ).padStart(2, '0');
@@ -97,9 +101,11 @@ export function Cinema() {
     );
 
     const year = tomorrow.getFullYear();
+
     const month = String(
       tomorrow.getMonth() + 1,
     ).padStart(2, '0');
+
     const day = String(
       tomorrow.getDate(),
     ).padStart(2, '0');
@@ -129,324 +135,367 @@ export function Cinema() {
   }
 
   return (
-    <section className="section">
-      <div className="container">
-        {/* ==========================================
-            CABEÇALHO
-        ========================================== */}
+    <main className="cinema-page">
+      {/* ==========================================
+          CABEÇALHO DA PÁGINA
+      ========================================== */}
 
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">
-              LAZER • RIO VERDE
-            </span>
+      <section className="cinema-page-header">
+        <div className="container">
+          <span className="cinema-page-eyebrow">
+            LAZER • RIO VERDE
+          </span>
 
-            <h1>Cinema em Rio Verde</h1>
-          </div>
+          <h1>Cinema em Rio Verde</h1>
+
+          <p>
+            Confira os filmes em cartaz, horários e
+            programação dos cinemas da cidade.
+          </p>
         </div>
+      </section>
 
-        <p className="cinema-intro">
-          Encontre os cinemas da cidade e consulte a
-          programação de filmes e horários.
-        </p>
+      {/* ==========================================
+          CONTEÚDO
+      ========================================== */}
 
-        {/* ==========================================
-            CARREGANDO
-        ========================================== */}
+      <section className="cinema-page-content">
+        <div className="container">
+          {/* ======================================
+              CARREGANDO
+          ====================================== */}
 
-        {loading && (
-          <div className="state">
-            <p>Carregando programação...</p>
-          </div>
-        )}
+          {loading && (
+            <div className="state cinema-page-state">
+              <p>Carregando programação...</p>
+            </div>
+          )}
 
-        {/* ==========================================
-            ERRO
-        ========================================== */}
+          {/* ======================================
+              ERRO
+          ====================================== */}
 
-        {error && (
-          <div className="state state-warning">
-            <strong>
-              Não foi possível carregar os cinemas.
-            </strong>
+          {error && (
+            <div className="state state-warning">
+              <strong>
+                Não foi possível carregar os cinemas.
+              </strong>
 
-            <p>{error}</p>
-          </div>
-        )}
+              <p>{error}</p>
+            </div>
+          )}
 
-        {/* ==========================================
-            CINEMAS
-        ========================================== */}
+          {/* ======================================
+              CINEMAS
+          ====================================== */}
 
-        {!loading && !error && (
-          <div className="cinema-list">
-            {cinemas.map((cinema) => (
-              <article
-                className="cinema-section"
-                key={cinema.id}
-              >
-                {/* ======================================
-                    INFORMAÇÕES DO CINEMA
-                ====================================== */}
+          {!loading && !error && (
+            <div className="cinema-list">
+              {cinemas.map((cinema) => (
+                <article
+                  className="cinema-section"
+                  key={cinema.id}
+                >
+                  {/* ==============================
+                      CABEÇALHO DO CINEMA
+                  ============================== */}
 
-                <header className="cinema-header">
-                  <div>
-                    <span className="eyebrow">
-                      CINEMA
-                    </span>
+                  <header className="cinema-header">
+                    <div className="cinema-header-info">
+                      <span className="eyebrow">
+                        CINEMA
+                      </span>
 
-                    <h2>{cinema.name}</h2>
+                      <h2>{cinema.name}</h2>
 
-                    <p className="cinema-address">
-                      {cinema.address}
-                    </p>
+                      <p className="cinema-address">
+                        {cinema.address}
+                      </p>
 
-                    <p className="cinema-description">
-                      {cinema.description}
-                    </p>
-                  </div>
-                </header>
+                      {cinema.description && (
+                        <p className="cinema-description">
+                          {cinema.description}
+                        </p>
+                      )}
+                    </div>
 
-                {/* ======================================
-                    FILMES
-                ====================================== */}
-
-                <div className="movie-grid">
-                  {cinema.movies.map((movie) => {
-                    const selectedSession =
-                      getSelectedSession(movie);
-
-                    return (
-                      <article
-                        className="movie-card"
-                        key={movie.id}
+                    {cinema.website && (
+                      <a
+                        href={cinema.website}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="cinema-website-button"
                       >
-                        {/* ==============================
-                            PÔSTER
-                        ============================== */}
+                        Site do cinema
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                  </header>
 
-                        <div className="movie-poster">
-                          {movie.poster ? (
-                            <img
-                              src={movie.poster}
-                              alt={`Pôster de ${movie.title}`}
-                              loading="lazy"
-                            />
-                          ) : (
-                            <div className="movie-poster-placeholder">
-                              <span>
-                                Sem pôster
-                              </span>
-                            </div>
-                          )}
-                        </div>
+                  {/* ==============================
+                      CABEÇALHO DOS FILMES
+                  ============================== */}
 
-                        {/* ==============================
-                            CONTEÚDO
-                        ============================== */}
+                  <div className="cinema-movies-heading">
+                    <div>
+                      <span>PROGRAMAÇÃO</span>
 
-                        <div className="movie-content">
-                          <h3>{movie.title}</h3>
+                      <h3>Filmes em cartaz</h3>
+                    </div>
 
-                          {/* ==========================
-                              META
-                          ========================== */}
+                    <strong>
+                      {cinema.movies.length}{' '}
+                      {cinema.movies.length === 1
+                        ? 'filme'
+                        : 'filmes'}
+                    </strong>
+                  </div>
 
-                          <div className="movie-meta">
-                            {movie.genre && (
-                              <span className="movie-genre">
-                                {movie.genre}
-                              </span>
-                            )}
+                  {/* ==============================
+                      FILMES
+                  ============================== */}
 
-                            {movie.classification && (
-                              <span className="movie-classification">
-                                {movie.classification}
-                              </span>
-                            )}
+                  <div className="movie-grid">
+                    {cinema.movies.map((movie) => {
+                      const selectedSession =
+                        getSelectedSession(movie);
 
-                            {movie.duration && (
-                              <span className="movie-duration">
-                                {movie.duration}
-                              </span>
+                      return (
+                        <article
+                          className="movie-card"
+                          key={movie.id}
+                        >
+                          {/* ========================
+                              PÔSTER
+                          ======================== */}
+
+                          <div className="movie-poster">
+                            {movie.poster ? (
+                              <img
+                                src={movie.poster}
+                                alt={`Pôster de ${movie.title}`}
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="movie-poster-placeholder">
+                                <span>
+                                  Sem pôster
+                                </span>
+                              </div>
                             )}
                           </div>
 
-                          {/* ==========================
-                              DESCRIÇÃO
-                          ========================== */}
+                          {/* ========================
+                              CONTEÚDO
+                          ======================== */}
 
-                          {movie.description && (
-                            <p className="movie-description">
-                              {movie.description}
-                            </p>
-                          )}
+                          <div className="movie-content">
+                            <h3>{movie.title}</h3>
 
-                          {/* ==========================
-                              PROGRAMAÇÃO
-                          ========================== */}
+                            {/* ======================
+                                META
+                            ====================== */}
 
-                          {movie.sessions.length > 0 && (
-                            <div className="movie-sessions">
-                              <h4>Horários</h4>
+                            <div className="movie-meta">
+                              {movie.genre && (
+                                <span className="movie-genre">
+                                  {movie.genre}
+                                </span>
+                              )}
 
-                              {/* ========================
-                                  DIAS
-                              ======================== */}
+                              {movie.classification && (
+                                <span className="movie-classification">
+                                  {movie.classification}
+                                </span>
+                              )}
 
-                              <div className="session-days-scroll">
-                                {movie.sessions.map(
-                                  (session) => {
-                                    const selected =
-                                      session.date ===
-                                      (selectedDates[
-                                        movie.id
-                                      ] ||
-                                        movie.sessions[0]
-                                          ?.date);
+                              {movie.duration && (
+                                <span className="movie-duration">
+                                  {movie.duration}
+                                </span>
+                              )}
+                            </div>
 
-                                    return (
-                                      <button
-                                        type="button"
-                                        key={session.date}
-                                        className={`session-day-button ${
-                                          selected
-                                            ? 'active'
-                                            : ''
-                                        }`}
-                                        onClick={() =>
-                                          selectDate(
-                                            movie.id,
-                                            session.date,
-                                          )
-                                        }
-                                      >
-                                        <span className="session-day-name">
-                                          {isToday(
-                                            session.date,
-                                          )
-                                            ? 'HOJE'
-                                            : isTomorrow(
-                                                session.date,
-                                              )
-                                              ? 'AMANHÃ'
-                                              : formatDayName(
-                                                  session.date,
-                                                )}
-                                        </span>
+                            {/* ======================
+                                DESCRIÇÃO
+                            ====================== */}
 
-                                        <span className="session-day-date">
-                                          {formatDate(
-                                            session.date,
-                                          )}
-                                        </span>
-                                      </button>
-                                    );
-                                  },
-                                )}
-                              </div>
+                            {movie.description && (
+                              <p className="movie-description">
+                                {movie.description}
+                              </p>
+                            )}
 
-                              {/* ========================
-                                  HORÁRIOS DO DIA
-                              ======================== */}
+                            {/* ======================
+                                PROGRAMAÇÃO
+                            ====================== */}
 
-                              {selectedSession && (
-                                <div className="session-selected">
-                                  <div className="session-selected-title">
-                                    Horários de{' '}
-                                    {isToday(
-                                      selectedSession.date,
-                                    )
-                                      ? 'hoje'
-                                      : formatDate(
-                                          selectedSession.date,
-                                        )}
-                                  </div>
+                            {movie.sessions.length > 0 && (
+                              <div className="movie-sessions">
+                                <h4>Horários</h4>
 
-                                  {/* ======================
-                                      GRADE DE HORÁRIOS
-                                  ====================== */}
+                                {/* ==================
+                                    DIAS
+                                ================== */}
 
-                                  <div className="session-list">
-                                    {selectedSession.items.map(
-                                      (
-                                        item,
-                                        index,
-                                      ) => (
-                                        <div
-                                          className="session-item"
-                                          key={`${selectedSession.date}-${item.time}-${index}`}
+                                <div className="session-days-scroll">
+                                  {movie.sessions.map(
+                                    (session) => {
+                                      const selected =
+                                        session.date ===
+                                        (selectedDates[
+                                          movie.id
+                                        ] ||
+                                          movie
+                                            .sessions[0]
+                                            ?.date);
+
+                                      return (
+                                        <button
+                                          type="button"
+                                          key={
+                                            session.date
+                                          }
+                                          className={`session-day-button ${
+                                            selected
+                                              ? 'active'
+                                              : ''
+                                          }`}
+                                          onClick={() =>
+                                            selectDate(
+                                              movie.id,
+                                              session.date,
+                                            )
+                                          }
                                         >
-                                          <div className="session-time">
-                                            {item.time}
-                                          </div>
+                                          <span className="session-day-name">
+                                            {isToday(
+                                              session.date,
+                                            )
+                                              ? 'HOJE'
+                                              : isTomorrow(
+                                                    session.date,
+                                                  )
+                                                ? 'AMANHÃ'
+                                                : formatDayName(
+                                                    session.date,
+                                                  )}
+                                          </span>
 
-                                          <div className="session-details">
-                                            {item.language &&
-                                              item.language !==
-                                                'Não informado' && (
-                                                <span className="session-language">
+                                          <span className="session-day-date">
+                                            {formatDate(
+                                              session.date,
+                                            )}
+                                          </span>
+                                        </button>
+                                      );
+                                    },
+                                  )}
+                                </div>
+
+                                {/* ==================
+                                    HORÁRIOS DO DIA
+                                ================== */}
+
+                                {selectedSession && (
+                                  <div className="session-selected">
+                                    <div className="session-selected-title">
+                                      Horários de{' '}
+                                      {isToday(
+                                        selectedSession.date,
+                                      )
+                                        ? 'hoje'
+                                        : formatDate(
+                                            selectedSession.date,
+                                          )}
+                                    </div>
+
+                                    {/* ================
+                                        GRADE
+                                    ================ */}
+
+                                    <div className="session-list">
+                                      {selectedSession.items.map(
+                                        (
+                                          item,
+                                          index,
+                                        ) => (
+                                          <div
+                                            className="session-item"
+                                            key={`${selectedSession.date}-${item.time}-${index}`}
+                                          >
+                                            <div className="session-time">
+                                              {item.time}
+                                            </div>
+
+                                            <div className="session-details">
+                                              {item.language &&
+                                                item.language !==
+                                                  'Não informado' && (
+                                                  <span className="session-language">
+                                                    {
+                                                      item.language
+                                                    }
+                                                  </span>
+                                                )}
+
+                                              {item.format && (
+                                                <span className="session-format">
                                                   {
-                                                    item.language
+                                                    item.format
                                                   }
                                                 </span>
                                               )}
 
-                                            {item.format && (
-                                              <span className="session-format">
-                                                {
-                                                  item.format
-                                                }
-                                              </span>
-                                            )}
+                                              {item.room && (
+                                                <span className="session-room">
+                                                  {
+                                                    item.room
+                                                  }
+                                                </span>
+                                              )}
 
-                                            {item.room && (
-                                              <span className="session-room">
-                                                {
-                                                  item.room
-                                                }
-                                              </span>
-                                            )}
-
-                                            {item.accessibility && (
-                                              <span className="session-accessibility">
-                                                Acessibilidade
-                                              </span>
-                                            )}
+                                              {item.accessibility && (
+                                                <span className="session-accessibility">
+                                                  Acessibilidade
+                                                </span>
+                                              )}
+                                            </div>
                                           </div>
-                                        </div>
-                                      ),
-                                    )}
+                                        ),
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
 
-                {/* ======================================
-                    SITE DO CINEMA
-                ====================================== */}
+          {!loading &&
+            !error &&
+            cinemas.length === 0 && (
+              <div className="state cinema-page-state">
+                <strong>
+                  Nenhuma programação encontrada.
+                </strong>
 
-                <footer className="cinema-links">
-                  <a
-                    href={cinema.website}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Site do cinema
-                  </a>
-                </footer>
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+                <p>
+                  Não há cinemas disponíveis no
+                  momento.
+                </p>
+              </div>
+            )}
+        </div>
+      </section>
+    </main>
   );
 }
 
